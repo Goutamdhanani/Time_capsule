@@ -20,7 +20,7 @@ export const MiningInterface: React.FC = () => {
 
  const fetchPendingCount = async () => {
     try {
-      const res = await fetch('http://localhost:5000/chain');
+      const res = await fetch('https://tcc-blockchain-87e6-c2ee2c02db18.herokuapp.com/chain');
       const data = await res.json();
       setNetworkStatus(prev => ({
         ...prev,

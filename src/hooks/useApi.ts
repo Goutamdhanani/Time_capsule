@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 
 // 🔁 Change this before deploying
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://tcc-blockchain-87e6-c2ee2c02db18.herokuapp.com';
 
 interface ApiState<T> {
   data: T | null;
