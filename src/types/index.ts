@@ -11,10 +11,20 @@ export interface TimeCapsule {
   createdAt: string;
 }
 
+// Capsule format returned in mined blocks (uses snake_case and UNIX timestamps)
+export interface MinedCapsule {
+  sender_name: string;
+  message: string;
+  is_public: boolean;
+  lock_until: number;       // UNIX timestamp
+  created_at: number;       // UNIX timestamp
+}
+
+
 export interface Block {
   index: number;
-  timestamp: string;
-  data: TimeCapsule[];
+  timestamp: number; // UNIX timestamp
+  data: MinedCapsule[];
   previousHash: string;
   hash: string;
   nonce: number;
@@ -25,7 +35,7 @@ export interface BlockchainData {
   chain: Block[];
   difficulty: number;
   miningReward: number;
-  pendingTransactions: TimeCapsule[];
+  pendingTransactions: MinedCapsule[];
 }
 
 export interface ApiResponse<T> {

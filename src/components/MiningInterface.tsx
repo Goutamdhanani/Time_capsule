@@ -3,6 +3,10 @@ import { Pickaxe, Zap, Activity, AlertCircle, CheckCircle, Clock } from 'lucide-
 import { Button } from './ui/Button';
 import { apiRequest } from '../hooks/useApi';
 import { MiningResult, NetworkStatus } from '../types';
+import { useEffect } from 'react';
+
+
+
 
 export const MiningInterface: React.FC = () => {
   const [isMining, setIsMining] = useState(false);
@@ -14,31 +18,50 @@ export const MiningInterface: React.FC = () => {
     pendingCount: 0
   });
 
+ const fetchPendingCount = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/chain');
+      const data = await res.json();
+      setNetworkStatus(prev => ({
+        ...prev,
+        pendingCount: data.pendingTransactions.length,
+        blockHeight: data.chain.length,
+        lastSync: new Date().toISOString()
+      }));
+    } catch (err) {
+      console.error("⚠️ Error fetching chain:", err);
+      setNetworkStatus(prev => ({
+        ...prev,
+        isOnline: false
+      }));
+    }
+  };
+
+  // ✅ INSIDE useEffect like a law-abiding citizen
+  useEffect(() => {
+    fetchPendingCount();
+  }, []);
+
   const startMining = async () => {
     setIsMining(true);
     setMiningResult(null);
-    
+
     try {
       const result = await apiRequest<MiningResult>('/api/mine', {
         method: 'POST'
       });
-      
+
       setMiningResult(result);
-      
-      // Update network status
-      setNetworkStatus(prev => ({
-        ...prev,
-        blockHeight: result.block.index,
-        lastSync: new Date().toISOString(),
-        pendingCount: 0
-      }));
+
+      // 🔁 Refresh network state after mining
+      await fetchPendingCount();
+
     } catch (error) {
-      alert('Mining failed. Please try again.');
+      alert('🧨 Mining failed. Try again after yelling at your code.');
     } finally {
       setIsMining(false);
     }
   };
-
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8">

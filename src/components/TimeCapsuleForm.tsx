@@ -51,7 +51,12 @@ export const TimeCapsuleForm: React.FC = () => {
     try {
       await apiRequest<TimeCapsule>('/api/capsules', {
         method: 'POST',
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          sender_name: formData.name,
+          message: formData.message,
+          is_public: formData.isPublic,
+          lock_until: Math.floor(new Date(formData.unlockDate).getTime() / 1000)
+        })
       });
       
       // Reset form

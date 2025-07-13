@@ -14,7 +14,7 @@ export const CapsuleGrid: React.FC = () => {
 
   const filteredCapsules = capsules?.filter(capsule => {
     const matchesSearch =
-      capsule.sender_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      capsule.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       capsule.message?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesFilter =
@@ -105,7 +105,7 @@ export const CapsuleGrid: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredCapsules?.map((capsule, index) => (
           <CapsuleCard
-            key={capsule.id || `${capsule.sender_name}-${capsule.createdAt}-${index}`}
+            key={capsule.id || `${capsule.name}-${capsule.createdAt}-${index}`}
             capsule={capsule}
           />
         ))}
@@ -141,7 +141,7 @@ const CapsuleCard: React.FC<CapsuleCardProps> = ({ capsule }) => {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
             <User className="w-5 h-5 text-gray-400" />
-            <span className="text-white font-medium">{capsule.sender_name}</span>
+            <span className="text-white font-medium">{capsule.name}</span>
           </div>
           <div className="flex items-center space-x-2">
             {isUnlocked ? (
